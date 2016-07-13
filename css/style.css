@@ -13,6 +13,11 @@ body{
     font-family: "Open Sans", "DejaVu Sans", sans-serif;
 }
 
+h1{
+    margin: 0;
+    padding: 0.33em 0 0.33em 0;
+}
+
 .hero{
     width: 100%;
     margin: auto;
@@ -25,7 +30,7 @@ body{
 
 .content{
     height: 100%;
-    margin: 0 1em 0 1em;
+    margin: 0 0.33em 0 0.33em;
     background: #FFFFFF;
 }
 
@@ -66,11 +71,11 @@ body{
     background-image: linear-gradient(to bottom, #F0F0F0, #99FF99)
 }
 
-.bubblesort-container tbody>tr{
+.bubblesort-container tbody>tr .color-bar{
     background-color: yellow;
 }
 
-.bubblesort-container .highlighted-row{
+.bubblesort-container .highlighted-row .color-bar{
     background-color: red;
 }
 
@@ -84,9 +89,15 @@ td, th{
 * Needs to be expanded to support a wider range of devices
 **/
 @media all and (max-width: 500px){
-    .bubblesort-container, .button-container{
+    .bubblesort-container{
         float: none;
-        clear:both;
+        clear: both;
+    }
+
+    .button-container{
+        float: left;
+        clear: both;
+        margin: auto;
     }
 
     .bubblesort-container table{

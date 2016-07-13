@@ -21,7 +21,7 @@ function ajaxCall(operation) {
     if (operation == "play") {
         for(var x=0; x<100; x++){
             //TODO: setTimeout() is not working come up with another way to slow it down a little
-            done_yet = setTimeout(bubbleSortCall("step"), 0);
+            done_yet = bubbleSortCall("step");
             if(done_yet == true){
                 break;
             }
@@ -51,11 +51,10 @@ function bubbleSortCall(operation){
         var doctored_output = result.split("<link rel=\"stylesheet\" type=\"text/css\" href=\"css/style.css\">");
         var trimmed_result = doctored_output[0].toString();
         trimmed_result = trimmed_result.trim();
-        console.log(trimmed_result);
-        if(trimmed_result == "disable"){
+        if(trimmed_result.toString() == "disable"){
             document.getElementById("step").disabled = true;
             document.getElementById("play").disabled = true;
-            return false;
+            return true;
         }
         else{
             $(".bubblesort-container").empty().append(trimmed_result);
