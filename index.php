@@ -1,20 +1,17 @@
 <?php
 /**
+ * 'index.php' Contains the logic required to run the single-page Bubble Sort web app
+ * It is loaded whenever an end user navigates to the root directory of a web server or <root>/index.php
+ * It is also called form 'js/ajax-calls.js'
  *
+ * Created by Alex on 7/13/2016.
  */
-//Initial requirements list
-//TODO: Each row will contain a colored rectangle corresponding to the number
-//TODO: When sort is finished hide or disable the button
-//TODO: BONUS: Play button that simulates steps, reloads the table using AJAX calls
-//TODO: BONUS: Drupal module: configurable, dedicated path, etc.
-//TODO: Documentation cleanup
 
-//Open/Resume a session so we can access the $_SESSION
+//Open/Resume a session then instantiate/grab our instance of 'BubbleSortApp' and run the requested function(s).
+//Then finally storing the data back in teh '$_SESSION' variable for the next operation
 session_start();
 
-//See what the enduser has requested of us
 if(isset($_POST['operation']) && !empty($_POST['operation'])){
-  //Create or grab an instance of the app and execute the requested function
   if($_POST['operation'] == 'shuffle'){
     $bubble_instance = new BubbleSortApp;
     $bubble_instance->initialize();
@@ -27,23 +24,34 @@ if(isset($_POST['operation']) && !empty($_POST['operation'])){
     $bubble_instance = $_SESSION['bubble_sort_app'];
     $bubble_instance->play();
   }
-  //If we get anything but one of those three operations something shady is going on
+
+  //If we get anything but one of those three operations something shady is going on so just return
   else{
     return;
   }
 
-  //Store our instance of the app in the $_SESSION variable for the next AJAX call
   if(isset($bubble_instance)){
     $_SESSION['bubble_sort_app'] = $bubble_instance;
   }
 }
 
+/**
+ * Class BubbleSortApp
+ *
+ * The BubbleSortApp encapsulates all data tied to the Bubble Sort algorithm as well as echo'ing out the appropriate data
+ * for 'js/ajax-calls.js' to redraw the table.
+ * Known Bug: when echo'ing data back to the front-end we are sending ALL of the HTML contained in this file not just the
+ * string we are attempting to output. A temporary workaround is in 'js/ajax-calls.js
+ */
 class BubbleSortApp {
+
+  //Declaration of protected globals
   protected $integer_array = array(); //Array holding 10 integers to be sorted
   protected $cur_pos; //Current position we are at in the array
+  protected $swap_counter=0; //Counter variable to determine if we've made a full pass
 
   /**
-   * Initialize data needed to run the sort
+   * Initialize the data needed to run the sort
    */
   function initialize(){
     $this->setCurPos(0);
@@ -64,23 +72,29 @@ class BubbleSortApp {
    */
   function step(){
     $local_array = $this->getIntegerArray();
-    $swapped = false;
+    $temp_counter = $this->getSwapCounter();
     if($this->getCurPos()+1 != 10){
       if($local_array[$this->getCurPos()] > $local_array[$this->getCurPos()+1]){
-        $swapped = true;
+        $temp_counter++;
         $a = $local_array[$this->getCurPos()];
         $b = $local_array[$this->getCurPos()+1];
         $local_array[$this->getCurPos()] = $b;
         $local_array[$this->getCurPos()+1] = $a;
         $this->setIntegerArray($local_array);
+        $this->setSwapCounter($temp_counter);
       }
     }
-    if($swapped == true){
-      $this->redraw_table();
-    }
+    //We are at the end of the array is 'step_counter' = 0? If not reset to 0 and try again.
     else{
-      $this->sort_finished();
+      if($this->getSwapCounter() == 0){
+        $this->sort_finished();
+        return;
+      }
+      else{
+        $this->setSwapCounter(0);
+      }
     }
+    $this->redraw_table();
   }
 
   /**
@@ -150,6 +164,24 @@ class BubbleSortApp {
   {
     $this->cur_pos = $cur_pos;
   }
+
+  /**
+   * @return int
+   */
+  public function getSwapCounter()
+  {
+    return $this->swap_counter;
+  }
+
+  /**
+   * @param int $swap_counter
+   */
+  public function setSwapCounter($swap_counter)
+  {
+    $this->swap_counter = $swap_counter;
+  }
+
+
 }
 ?>
 
