@@ -20,8 +20,8 @@ body{
 }
 
 .content{
-    width: 100%;
-    padding: 0 1em 0 1em;
+    height: 100%;
+    margin: 0 1em 0 1em;
     background: #FFFFFF;
 }
 
@@ -29,6 +29,17 @@ body{
     float: right;
     max-width: 200px;
     padding: 1em;
+}
+
+.button-container button{
+    float:left;
+    clear:both;
+    min-width:100px;
+    min-height: 20px;
+    text-align:center;
+    vertical-align: middle;
+    padding:3px;
+    margin: 3px 0 3px 0;
 }
 
 .hero{
@@ -54,7 +65,9 @@ body{
 
 td, th{
     padding: 3px;
+    border-bottom: solid #F0F0F0 1px;
 }
+
 
 .bubblesort-container thead{
     background-image: linear-gradient(to bottom, #F0F0F0, #99FF99)
@@ -68,3 +81,13 @@ td, th{
     background-color: red;
 }
 
+@media all and (max-width: 500px){
+    .bubblesort-container, .button-container{
+        float: none;
+        clear:both;
+    }
+
+    .bubblesort-container table{
+        min-width: 98%;
+    }
+}
