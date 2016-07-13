@@ -1,3 +1,12 @@
 /**
 * Stylesheet for bubble sort app
 */
+
+tr{
+    background-color:yellow;
+}
+
+.highlighted-row{
+    background-color:red;
+}
+

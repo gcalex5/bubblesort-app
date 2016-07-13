@@ -23,6 +23,7 @@ if(isset($_POST['operation']) && !empty($_POST['operation'])){
   if($_POST['operation'] == 'shuffle'){
     $bubble_instance = new BubbleSortApp;
     $bubble_instance->initialize();
+    //TODO: Enable Step/Play buttons
   }
   else if($_POST['operation'] == 'step'){
     $bubble_instance = $_SESSION['bubble_sort_app'];
@@ -31,6 +32,10 @@ if(isset($_POST['operation']) && !empty($_POST['operation'])){
   else if($_POST['operation'] == 'play'){
     $bubble_instance = $_SESSION['bubble_sort_app'];
     $bubble_instance->play();
+  }
+  //If we get anything but one of those three operations something shady is going on
+  else{
+    return;
   }
 
   //Store our instance of the app in the $_SESSION variable for the next AJAX call
@@ -48,19 +53,21 @@ class BubbleSortApp {
    * Will also need to clear out any data we're holding in the session
    */
   function initialize(){
-    //TODO: Clean out old data if any is present since we are restarting the app
-    //TODO: Enable Step/Play
-    $this->cur_pos = 0;
+    //TODO: Enable Step/Play Buttons
+    $this->setCurPos(0);
+    $local_array = $this->getIntegerArray();
     for($x=0; $x<10; $x++){
-      $this->integer_array[$x] = rand(0, 100);
+      $local_array[$x] = rand(0, 100);
     }
+    $this->setIntegerArray($local_array);
+    $this->redraw_table();
   }
 
   /**
    * Run bubble sort to completion at one second steps
    */
   function play(){
-
+    //TODO: Disable Step/Play after hitting play
   }
 
   /**
@@ -71,19 +78,46 @@ class BubbleSortApp {
    * in order to update it.
    */
   function step(){
-    if($this->integer_array[$this->cur_pos] > $this->integer_array[$this->cur_pos+1]){
-      $a = $this->integer_array[$this->cur_pos];
-      $b = $this->integer_array[$this->cur_pos+1];
-      $this->integer_array[$this->cur_pos] = $a;
-      $this->integer_array[$this->cur_pos+1] = $b;
-      if($this->cur_pos == 9){
-        $this->cur_pos = 0;
+    $local_array = $this->getIntegerArray();
+    if($this->getCurPos()+1 != 10){
+      if($local_array[$this->getCurPos()] > $local_array[$this->getCurPos()+1]){
+        $a = $local_array[$this->getCurPos()];
+        $b = $local_array[$this->getCurPos()+1];
+        $local_array[$this->getCurPos()] = $b;
+        $local_array[$this->getCurPos()+1] = $a;
+        $this->setIntegerArray($local_array);
       }
-      $this->cur_pos++;
-      redraw_table();
     }
+    $this->redraw_table();
+    //TODO: Add an 'win condition'
+    //TODO: After 'win condition' disable Step/Play
+  }
 
-    //TODO: Add an 'the array is sorted' condition
+  function redraw_table(){
+    if(sizeof($this->getIntegerArray())>0){
+      $tmp='<table><thead><th>BUBBLE SORT</th></thead><tbody>';
+      for ($x=0; $x<10; $x++) {
+        if ($x == $this->getCurPos() || $x == ($this->getCurPos() + 1)){
+          $tmp .= '<tr class="highlighted-row"><td>' . $this->getIntegerArray()[$x] . '</td></tr>';
+        }
+        else{
+          $tmp .= '<tr><td>' . $this->getIntegerArray()[$x] . '</td></tr>';
+        }
+      }
+
+      $tmp.='</tbody></table>';
+      echo $tmp;
+      if($this->getCurPos() == 9){
+        $this->setCurPos(0);
+      }
+      else{
+        $this->setCurPos($this->getCurPos()+ 1);
+      }
+    }
+    //Otherwise go back where we came from
+    else{
+      return;
+    }
   }
 
   /**
@@ -102,10 +136,27 @@ class BubbleSortApp {
     return $this->cur_pos;
   }
 
+  /**
+   * @param array $integer_array
+   */
+  public function setIntegerArray($integer_array)
+  {
+    $this->integer_array = $integer_array;
+  }
+
+  /**
+   * @param mixed $cur_pos
+   */
+  public function setCurPos($cur_pos)
+  {
+    $this->cur_pos = $cur_pos;
+  }
+
 
 }
 ?>
 
+<link rel="stylesheet" type="text/css" href="css/style.css">
 <!-- Import Jquery via CDN -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
 <script type="text/javascript" src="js/ajax-calls.js"></script>
@@ -119,14 +170,5 @@ class BubbleSortApp {
     <button id="play" type="play" onclick="ajaxCall('play')">Play</button>
   </div>
   <div class="bubblesort-container">
-    <!-- Drawn via PHP echo -->
-    <?php
-    function redraw_table(){
-      $int_array = $bubble_instance->getIntegerArray();
-      for($x=0; $x<10; $x++){
-        echo($int_array[$x]);
-      }
-    }
-    ?>
   </div>
 </div>
