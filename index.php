@@ -3,27 +3,21 @@
  *
  */
 //Initial requirements list
-//TODO: Application should visually display the algorithm for a vector of 10 integers
-//TODO: Step -> Step performs one step of the algorithm and displays it on the page
-//TODO: Display array as table with 10 rows
 //TODO: Each row will contain a colored rectangle corresponding to the number
-//TODO: When step is pressed the two numbers being compared should be highlighted with a different color
-//TODO: Continually pressing step will sort the numbers from largest(top of page) to smalled(bottom of page)
 //TODO: When sort is finished hide or disable the button
-//TODO: All processing needs to be done on the server
 //TODO: BONUS: Play button that simulates steps, reloads the table using AJAX calls
 //TODO: BONUS: Drupal module: configurable, dedicated path, etc.
 //TODO: Documentation cleanup
 
 //Open/Resume a session so we can access the $_SESSION
 session_start();
+
 //See what the enduser has requested of us
 if(isset($_POST['operation']) && !empty($_POST['operation'])){
   //Create or grab an instance of the app and execute the requested function
   if($_POST['operation'] == 'shuffle'){
     $bubble_instance = new BubbleSortApp;
     $bubble_instance->initialize();
-    //TODO: Enable Step/Play buttons
   }
   else if($_POST['operation'] == 'step'){
     $bubble_instance = $_SESSION['bubble_sort_app'];
@@ -49,11 +43,9 @@ class BubbleSortApp {
   protected $cur_pos; //Current position we are at in the array
 
   /**
-   * Initialize an array of ten random integers.
-   * Will also need to clear out any data we're holding in the session
+   * Initialize data needed to run the sort
    */
   function initialize(){
-    //TODO: Enable Step/Play Buttons
     $this->setCurPos(0);
     $local_array = $this->getIntegerArray();
     for($x=0; $x<10; $x++){
@@ -64,23 +56,18 @@ class BubbleSortApp {
   }
 
   /**
-   * Run bubble sort to completion at one second steps
-   */
-  function play(){
-    //TODO: Disable Step/Play after hitting play
-  }
-
-  /**
    * Run one round of the bubble sort algorithm
    *
    * Use the $cur_pos variable to compare the two values in the array.
-   * Swap if the lower value is higher. Call the function we are using to draw the table
-   * in order to update it.
+   * Swap if the first value is higher. Call the function we are using to draw the table
+   * in order to update it. Or call sort_finished to exit out of the algorithm.
    */
   function step(){
     $local_array = $this->getIntegerArray();
+    $swapped = false;
     if($this->getCurPos()+1 != 10){
       if($local_array[$this->getCurPos()] > $local_array[$this->getCurPos()+1]){
+        $swapped = true;
         $a = $local_array[$this->getCurPos()];
         $b = $local_array[$this->getCurPos()+1];
         $local_array[$this->getCurPos()] = $b;
@@ -88,11 +75,17 @@ class BubbleSortApp {
         $this->setIntegerArray($local_array);
       }
     }
-    $this->redraw_table();
-    //TODO: Add an 'win condition'
-    //TODO: After 'win condition' disable Step/Play
+    if($swapped == true){
+      $this->redraw_table();
+    }
+    else{
+      $this->sort_finished();
+    }
   }
 
+  /**
+   *
+   */
   function redraw_table(){
     if(sizeof($this->getIntegerArray())>0){
       $tmp='<table><thead><th>Bubble Sort Table</th></thead><tbody>';
@@ -104,7 +97,6 @@ class BubbleSortApp {
           $tmp .= '<tr><td>' . $this->getIntegerArray()[$x] . '</td></tr>';
         }
       }
-
       $tmp.='</tbody></table>';
       echo $tmp;
       if($this->getCurPos() == 9){
@@ -118,6 +110,13 @@ class BubbleSortApp {
     else{
       return;
     }
+  }
+
+  /**
+   *
+   */
+  function sort_finished(){
+    echo 'disable';
   }
 
   /**
@@ -165,8 +164,8 @@ class BubbleSortApp {
   <div class="content">
     <div class="button-container">
       <button id="shuffle" type="button" onclick="ajaxCall('shuffle')">Shuffle</button>
-      <button id="step" type="button" onclick="ajaxCall('step')">Step</button>
-      <button id="play" type="play" onclick="ajaxCall('play')">Play</button>
+      <button id="step" type="button" onclick="ajaxCall('step')" disabled="true">Step</button>
+      <button id="play" type="play" onclick="ajaxCall('play')" disabled="true">Play</button>
     </div>
     <div class="bubblesort-container">
     </div>
