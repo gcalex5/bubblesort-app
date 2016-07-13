@@ -95,7 +95,7 @@ class BubbleSortApp {
 
   function redraw_table(){
     if(sizeof($this->getIntegerArray())>0){
-      $tmp='<table><thead><th>BUBBLE SORT</th></thead><tbody>';
+      $tmp='<table><thead><th>Bubble Sort Table</th></thead><tbody>';
       for ($x=0; $x<10; $x++) {
         if ($x == $this->getCurPos() || $x == ($this->getCurPos() + 1)){
           $tmp .= '<tr class="highlighted-row"><td>' . $this->getIntegerArray()[$x] . '</td></tr>';
@@ -151,8 +151,6 @@ class BubbleSortApp {
   {
     $this->cur_pos = $cur_pos;
   }
-
-
 }
 ?>
 
@@ -164,11 +162,14 @@ class BubbleSortApp {
   <div class="hero">
     <h1>Bubble Sort Coding Challenge</h1>
   </div>
-  <div class="button-container">
-    <button id="shuffle" type="button" onclick="ajaxCall('shuffle')">Shuffle</button>
-    <button id="step" type="button" onclick="ajaxCall('step')">Step</button>
-    <button id="play" type="play" onclick="ajaxCall('play')">Play</button>
+  <div class="content">
+    <div class="button-container">
+      <button id="shuffle" type="button" onclick="ajaxCall('shuffle')">Shuffle</button>
+      <button id="step" type="button" onclick="ajaxCall('step')">Step</button>
+      <button id="play" type="play" onclick="ajaxCall('play')">Play</button>
+    </div>
+    <div class="bubblesort-container">
+    </div>
   </div>
-  <div class="bubblesort-container">
-  </div>
+
 </div>

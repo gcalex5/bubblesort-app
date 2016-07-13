@@ -15,5 +15,4 @@ function ajaxCall(operation){
         $(".bubblesort-container").empty();
         $(".bubblesort-container").append(result);
     });
-
 }

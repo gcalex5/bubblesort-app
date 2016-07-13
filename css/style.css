@@ -1,12 +1,70 @@
 /**
 * Stylesheet for bubble sort app
 */
-
-tr{
-    background-color:yellow;
+body{
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    font-family: "Open Sans", "DejaVu Sans", sans-serif;
+    /**
+    * Fix for AJAX double loading the body
+    * Makes it look a little less crappy and doesn't double extend to 1600+px
+    **/
+    max-height: 868px;
+    overflow: hidden;
 }
 
-.highlighted-row{
-    background-color:red;
+.container{
+    background: #EBEBE0;
+}
+
+.content{
+    width: 100%;
+    padding: 0 1em 0 1em;
+    background: #FFFFFF;
+}
+
+.button-container{
+    float: right;
+    max-width: 200px;
+    padding: 1em;
+}
+
+.hero{
+    width: 100%;
+    margin: auto;
+    text-align: center;
+}
+
+.bubblesort-container{
+    float: left;
+    max-width: 400px;
+    padding: 1em;
+}
+
+.bubblesort-container table{
+    min-width:200px;
+    margin:auto;
+    border: solid #cccccc 1px;
+    border-radius: 5px;
+    border-collapse: collapse;
+    padding: 1em;
+}
+
+td, th{
+    padding: 3px;
+}
+
+.bubblesort-container thead{
+    background-image: linear-gradient(to bottom, #F0F0F0, #99FF99)
+}
+
+.bubblesort-container tbody>tr{
+    background-color: yellow;
+}
+
+.bubblesort-container .highlighted-row{
+    background-color: red;
 }
 
