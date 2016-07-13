@@ -105,10 +105,10 @@ class BubbleSortApp {
       $tmp='<table><thead><th>Bubble Sort Table</th></thead><tbody>';
       for ($x=0; $x<10; $x++) {
         if ($x == $this->getCurPos() || $x == ($this->getCurPos() + 1)){
-          $tmp .= '<tr class="highlighted-row"><td>' . $this->getIntegerArray()[$x] . '</td></tr>';
+          $tmp .= '<tr class="highlighted-row"><td><div class="color-bar" style="width: '. $this->getIntegerArray()[$x] . '%;">' . $this->getIntegerArray()[$x] . '</div></td></tr>';
         }
         else{
-          $tmp .= '<tr><td>' . $this->getIntegerArray()[$x] . '</td></tr>';
+          $tmp .= '<tr><td><div class="color-bar" style="width: '. $this->getIntegerArray()[$x] . '%;">' . $this->getIntegerArray()[$x] . '</div></td></tr>';
         }
       }
       $tmp.='</tbody></table>';

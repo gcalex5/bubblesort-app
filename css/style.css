@@ -71,11 +71,11 @@ h1{
     background-image: linear-gradient(to bottom, #F0F0F0, #99FF99)
 }
 
-.bubblesort-container tbody>tr{
+.bubblesort-container tbody>tr .color-bar{
     background-color: yellow;
 }
 
-.bubblesort-container .highlighted-row{
+.bubblesort-container .highlighted-row .color-bar{
     background-color: red;
 }
 
